@@ -15,6 +15,7 @@
  		</style>
 
 	</head>
+	<script src="js/studio2.js"></script>
 	<body>
 
 
@@ -23,7 +24,7 @@
 		<h1>Global Attractions Attendance</h1>
 
 		<div class="user-control">
-			<select id="attraction-category" class="form-control">
+			<select id="attraction-category" class="form-control" onchange="dataManipulation()">
 			  <option value="all">All Attractions</option>
 			  <option value="Theme Park">Theme Park</option>
 			  <option value="Water Park">Water Park</option>
@@ -35,6 +36,44 @@
 		<div id="chart-area"></div>
 
 	</div>
+	<script>
+
+		function dataManipulation(){
+
+			var select = document.getElementById("attraction-category");
+			var select_value = select.options[select.selectedIndex].value;
+			console.log(select_value);
+			if(select_value == "all"){
+					dataFiltering();
+					return;
+			}
+			else{
+				var attractions = attractionData;
+				// sort JSON array descending order by visitors
+
+				attractions.sort( function(a, b){
+				return b.Visitors - a.Visitors;
+				});
+
+				var filtered = attractions.filter( function(value, index) {
+				return (value.Category == select_value);
+
+				});
+
+				var filtered2 = filtered.filter( function(value, index) {
+			   return (index < 5);
+
+				});
+
+				attractions = filtered2;
+				console.log(attractions);
+
+				renderBarChart(attractions);
+			}
+
+		}
+
+</script>
 	
 	  
 	<!-- Load JS libraries: jQuery, bootstrap, D3, D3 Tooltips -->
