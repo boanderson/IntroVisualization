@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Studio 3 | Bo Anderson</title>
+<!-- <link rel="stylesheet" href="css/style.css"> -->
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<!-- <script src="js/bootstrap.min.js"></script> -->
+</head>
+
+<body>
+<h1>ACTIVITY I</h1>
+<svg>
+    <rect width="400px" height="200px" style="fill:green"></rect>
+</svg>
+<script>
+    d3.select("body").append("h2").text("Dynamic Content");
+</script><br><br>
+<h1>ACTIVITY II</h1>
+<script>
+    var sandwiches = [
+        { name: "Thesis", price: 7.95, size: "large" },
+        { name: "Dissertation", price: 8.95, size: "large" },
+        { name: "Highlander", price: 6.50, size: "small" },
+        { name: "Just Tuna", price: 6.50, size: "small" },
+        { name: "So-La", price: 7.95, size: "large" },
+        { name: "Special", price: 12.50, size: "small" }
+    ];
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", "500px")
+        .attr("height", "500px");
+    
+    svg.selectAll("circle")
+        .data(sandwiches)
+        .enter()
+        .append("circle")
+        .attr("width", 50)
+        .attr("height", 50)
+        .attr("cy", 60)
+        .attr("cx", function(d, index) {
+            return 40 + (index * 80);
+        })
+        .attr("fill", function(d) {
+            if(d.price < 7.0) {
+                return "red";
+            }
+            else {
+                return "navy";
+            }
+        })
+        .attr("stroke", function(d) {
+            if(d.price < 7.0) {
+                return "black";
+            }
+            else {
+                return "pink";
+            }
+        })
+        .attr("stroke-width", 10)
+        .style("r", function(d) {
+            if(d.size == "large")
+                return 30;
+            else
+                return 15;
+        })
+    ;
+
+console.log("Do something else, without the data");
+
+</script>
+<h1>ACTIVITY III</h1>
+
+<script src="d3/d3.min.js"></script>
+<script src="d3/d3.js"></script>
+<script src="js/main.js"></script>
+</body>
+
+</html>
