@@ -2,8 +2,44 @@
 // These keep JSHint quiet if you're using it (highly recommended!)
 
 function staircase() {
+    var i , j;
+    const updatedOrder = [] ;
+    var max_width = 0 ; //arbitrary small value 
     // ****** TODO: PART II ******
     console.log("STAIRCASE PRESSED");
+    const bchart = document.getElementById("barcharts");
+    const numChildren = bchart.childElementCount;
+    //console.log(numChildren);
+    for(i = 0; i < numChildren; ++i) {
+        if(bchart.children[i].id == "first") {
+            for(j = 0; j < numChildren; ++j) {
+                //checks if on "first bar chart"
+                if(bchart.children[j].id == "first") {
+                    console.log(bchart.children[j].children[0].width);
+                    var rect = bchart.children[j].children[0] ;
+                    var width = rect.style.width ;
+                    console.log(width);
+                    if(width >= max_width) {
+                        max_width = width ;
+                    }
+                }
+            }
+
+            updatedOrder[i] = max_width ;
+        }
+    }
+
+    console.log(updatedOrder[0]);
+    
+    j = 0; //will be the counter for first bar chart children
+    for(i = 0; i < numChildren; ++i) {
+        if(bchart.children[i].transform.x == 0) {
+            console.log(bchart.children[j].children[0].style.width);
+            bchart.children[j].children[0].style.width = updatedOrder[j];
+            j++;
+        }
+    }
+
 }
 
 function update(data) {
@@ -87,6 +123,7 @@ function changeData() {
     else{
         d3.csv('data/' + dataFile + '.csv').then(update);
     }
+    console.log("CHANGE DATA");
 }
 
 function randomSubset() {
@@ -108,4 +145,5 @@ function randomSubset() {
     else{
         changeData();
     }
+    console.log("RANDOM SUBSET");
 }
