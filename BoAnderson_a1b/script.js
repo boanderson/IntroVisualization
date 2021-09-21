@@ -166,27 +166,24 @@ function updateData(d) {
         .enter()
         .append("rect")
         .attr("width", function(d) {
+            console.log(d.b);
             return d.a * 25.0;
         })
         .attr("height", 19)
         .attr("transform", function(d) {
                 translateY1 -= 20;
                 return "translate(0," + translateY1 + ")";
-        });
-
-        bchart.selectAll("rect")
-        .data(data)
-        .enter()
-        .merge(bchart)
+        })
         .append("rect")
         .attr("width", function(d) {
+            console.log(d.a);
             return d.b * 25.0;
         })
         .attr("height", 19)
         .attr("transform", function(d) {
                 translateY2 -= 20;
                 return "translate(400," + translateY2 + ")";
-        })
+        });
     })
 };
 
