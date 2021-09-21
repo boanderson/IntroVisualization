@@ -5,6 +5,7 @@ function staircase() {
     var i , j;
     const updatedOrder = [] ;
     var max_width = 0 ; //arbitrary small value 
+    var previous_max = 500; //arbitrary large value
     // ****** TODO: PART II ******
     console.log("STAIRCASE PRESSED");
     const bchart = document.getElementById("barcharts");
@@ -12,33 +13,40 @@ function staircase() {
     //console.log(numChildren);
     for(i = 0; i < numChildren; ++i) {
         if(bchart.children[i].id == "first") {
+            max_width = 0;
             for(j = 0; j < numChildren; ++j) {
+
                 //checks if on "first bar chart"
                 if(bchart.children[j].id == "first") {
-                    console.log(bchart.children[j].children[0].width);
-                    var rect = bchart.children[j].children[0] ;
-                    var width = rect.style.width ;
-                    console.log(width);
-                    if(width >= max_width) {
+                    //console.log(bchart.children[j].children[0].width.baseVal.value);
+                    var rect = bchart.children[j];
+                //BEGIN CITATION #1
+                    var width = rect.width.baseVal.value ;
+                //END CITATION #1
+                    if(width >= max_width && width < previous_max) {
                         max_width = width ;
                     }
                 }
             }
 
             updatedOrder[i] = max_width ;
+            previous_max = max_width ;
         }
     }
 
-    console.log(updatedOrder[0]);
+    //console.log(updatedOrder[0]);
     
     j = 0; //will be the counter for first bar chart children
     for(i = 0; i < numChildren; ++i) {
-        if(bchart.children[i].transform.x == 0) {
-            console.log(bchart.children[j].children[0].style.width);
-            bchart.children[j].children[0].style.width = updatedOrder[j];
+        if(bchart.children[i].id == "first") {
+            //console.log(updatedOrder[j]);
+            //console.log(bchart.children[j].children[0].width.baseVal.value);
+            bchart.children[j].width.baseVal.value = updatedOrder[j];
             j++;
         }
     }
+    
+    
 
 }
 
@@ -81,6 +89,9 @@ function update(data) {
         .range([0, 110]);
 
     // ****** TODO: PART III (you will also edit in PART V) ******
+    var dataFile = document.getElementById('dataset').value;
+    clearGraph("bar");
+    updateData(dataFile);
 
     // TODO: Select and update the 'a' bar chart bars
 
@@ -114,6 +125,15 @@ function update(data) {
     // ****** TODO: PART IV ******
 }
 
+function clearGraph(type) {
+    if(type == "bar") {
+        let mybar = d3.select('#barcharts')
+            .selectAll("rect")
+            .remove()
+            .exit();
+    }
+}
+
 function changeData() {
     // // Load the file indicated by the select menu
     var dataFile = document.getElementById('dataset').value;
@@ -125,6 +145,51 @@ function changeData() {
     }
     console.log("CHANGE DATA");
 }
+
+function updateData(d) {
+    console.log(d);
+    var i = 0;
+    var translateY1 = 220; //starting y value for transformation
+    var translateY2 = 220;
+    var translateX = 0; //starting x value for transformation
+    d3.csv('data/' + d + '.csv')
+    .then(data => {
+        var bchart;
+        console.log(data);
+        var i = 0; //counter
+        const children = 22;
+        console.log("CHILDREN: " + children);
+        bchart = d3.select('#barcharts');
+        console.log(bchart.attr("width"));
+        bchart.selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("width", function(d) {
+            return d.a * 25.0;
+        })
+        .attr("height", 19)
+        .attr("transform", function(d) {
+                translateY1 -= 20;
+                return "translate(0," + translateY1 + ")";
+        });
+
+        bchart.selectAll("rect")
+        .data(data)
+        .enter()
+        .merge(bchart)
+        .append("rect")
+        .attr("width", function(d) {
+            return d.b * 25.0;
+        })
+        .attr("height", 19)
+        .attr("transform", function(d) {
+                translateY2 -= 20;
+                return "translate(400," + translateY2 + ")";
+        })
+    })
+};
+
 
 function randomSubset() {
     // Load the file indicated by the select menu,
