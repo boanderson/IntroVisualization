@@ -55,11 +55,17 @@ ID: 463793
             padding: 1em;
         }
     </style>
+    <script src="script.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+    <script src='script.js'>
+        //BEGIN CITATION #2
+        d3.select(window).on("load", changeData());
+        //END CITATION #2
+    </script>
 </head>
-<script src="script.js"></script>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="https://code.jquery.com/jquery-latest.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+
 <body>
 
 <h3>CSE 457 Assignment 1B</h3>
@@ -85,134 +91,101 @@ ID: 463793
 </span>
 
 <span>
-    <input type="checkbox" id="random" onclick="randomSubset()"> Random Subset
+    <input type="checkbox" id="random" onclick="changeData();"> Random Subset
 </span>
 
 <br/>
-
+    <div>
     <h2>Bar Charts</h2>
-    <svg class="chart" width="1000" height="300" id="barcharts">
+    <svg class="chart" width="300" height="300" id="barcharts1">
         <!-- Paste your Part A solution here -->
             <!-- scaling all elements of x data by 25 for width-->
         <!-- BAR GRAPH #1 : X Values -->
-        <rect transform="translate(0,200)" id="first" width="250" height="19"></rect>
-        <rect transform="translate(0,180)" id="first" width="200" height="19"></rect>
-        <rect transform="translate(0,160)" id="first" width="325" height="19"></rect>
-        <rect transform="translate(0,140)" id="first" width="225" height="19"></rect>
-        <rect transform="translate(0,120)" id="first" width="275" height="19"></rect>
-        <rect transform="translate(0,100)" id="first" width="350" height="19"></rect>
-        <rect transform="translate(0,80)" id="first" width="150" height="19"></rect>
-        <rect transform="translate(0,60)" id="first" width="100" height="19"></rect>
-        <rect transform="translate(0,40)" id="first" width="300" height="19"></rect>
-        <rect transform="translate(0,20)" id="first" width="175" height="19"></rect>
-        <rect transform="translate(0,0)" id="first" width="125" height="19"></rect>
+        <rect transform="translate(0,200)" width="250" height="19"></rect>
+        <rect transform="translate(0,180)" width="200" height="19"></rect>
+        <rect transform="translate(0,160)" width="325" height="19"></rect>
+        <rect transform="translate(0,140)" width="225" height="19"></rect>
+        <rect transform="translate(0,120)" width="275" height="19"></rect>
+        <rect transform="translate(0,100)" width="350" height="19"></rect>
+        <rect transform="translate(0,80)" width="150" height="19"></rect>
+        <rect transform="translate(0,60)" width="100" height="19"></rect>
+        <rect transform="translate(0,40)" width="300" height="19"></rect>
+        <rect transform="translate(0,20)" width="175" height="19"></rect>
+        <rect transform="translate(0,0)" width="125" height="19"></rect>
+    </svg>
+    <svg class="chart" width="600" height="300" id="barcharts2">
 
          <!-- BAR GRAPH #2 : Y Values -->
-        <rect transform="translate(400,200)" id="second" width="201" height="19"></rect>
-        <rect transform="translate(400,180)" id="second" width="173.75" height="19"></rect>
-        <rect transform="translate(400,160)" id="second" width="189.5" height="19"></rect>
-        <rect transform="translate(400,140)" id="second" width="220.25" height="19"></rect>
-        <rect transform="translate(400,120)" id="second" width="208.25" height="19"></rect>
-        <rect transform="translate(400,100)" id="second" width="249" height="19"></rect>
-        <rect transform="translate(400,80)" id="second" width="181" height="19"></rect>
-        <rect transform="translate(400,60)" id="second" width="106.5" height="19"></rect>
-        <rect transform="translate(400,40)" id="second" width="271" height="19"></rect>
-        <rect transform="translate(400,20)" id="second" width="120.5" height="19"></rect>
-        <rect transform="translate(400,0)" id="second" width="142" height="19"></rect>
-    </svg>
+        <rect transform="translate(300,200)" width="201" height="19"></rect>
+        <rect transform="translate(300,180)" width="173.75" height="19"></rect>
+        <rect transform="translate(300,160)" width="189.5" height="19"></rect>
+        <rect transform="translate(300,140)" width="220.25" height="19"></rect>
+        <rect transform="translate(300,120)" width="208.25" height="19"></rect>
+        <rect transform="translate(300,100)" width="249" height="19"></rect>
+        <rect transform="translate(300,80)" width="181" height="19"></rect>
+        <rect transform="translate(300,60)" width="106.5" height="19"></rect>
+        <rect transform="translate(300,40)" width="271" height="19"></rect>
+        <rect transform="translate(300,20)" width="120.5" height="19"></rect>
+        <rect transform="translate(300,0)" width="142" height="19"></rect>
+    </svg></div>
 
 <br>
-    <h2>Line Charts</h2>
-    <svg translate="scale(1 -1)" viewBox="0 0 400 120" class="chart">
-        <!-- Citations #3 END -->
-            <polyline
+    <div><h2>Line Charts</h2>
+    <svg width="200" height="200" class="chart" id="linecharts1">
+            <path transform="scale(1 -1) translate(40, -200)""
             fill="none"
             stroke="#0074d9"
             stroke-width="3"
-            points="
-                0, 75
-                15, 60
-                30, 97.5
-                45, 67.5
-                60, 82.5
-                75, 105
-                90, 45
-                105, 30
-                120, 90
-                135, 52.5
-                150, 37.5"/>
+            d="M 0 75 L 10 60 L 20 97.5
+            L 30 67.5 L 40 82.5 L 50 105
+            L 60 45 L 70 30 L 80 90 L 90 52.5
+            L 100 37.5"/>
     </svg>
         <!-- LINE CHART #2: Y Values
             scale each point by 7.5 -->
     
-    <svg transform="scale(1 -1)" viewBox="0 0 400 120" class="chart">
-        <polyline
+    <svg width="200" height="200" class="chart" id="linecharts2">
+        <path transform="scale(1 -1) translate(40, -200)"
             fill="none"
             stroke="#0074d9"
             stroke-width="3"
-            points="
-                0, 60.3
-                15, 52.125
-                30, 56.85
-                45, 66.075
-                60, 62.475
-                75, 74.7
-                90, 54.3
-                105, 31.95
-                120, 81.3
-                135, 36.15
-                150, 42.6"/>
-    </svg>
+            d="M 0 60.3 L 15 52.125 L 30 56.85
+            L 45 66.075 L 60 62.475 L 75 74.7
+            L 90 54.3 L 105 31.95 L 120 81.3
+            L 135 36.15 L 150 42.6"/>
+    </svg></div>
 
 <br>
-    <h2>Area Charts</h2>
-    <svg transform="scale(1 -1)" viewBox="0 0 400 120" class="chart">
-        <polyline
+
+    <div><h2>Area Charts</h2>
+    <!-- AREA CHART #1: Y Values
+        scale each point by 7.5 -->
+    <svg width="200" height="200" id="areacharts1" class="chart">
+        <path transform="scale(1 -1) translate(40, -200)"
         fill="#0074d9"
         stroke="#0074d9"
         stroke-width="3"
-        points="
-            0, 0
-            0, 75
-            15, 60
-            30, 97.5
-            45, 67.5
-            60, 82.5
-            75, 105
-            90, 45
-            105, 30
-            120, 90
-            135, 52.5
-            150, 37.5
-            150, 0"/>
+        d="M 0 0 L 0 75 L 10 60 L 20 97.5 L 30 67.5
+        L 40 82.5 L 50 105 L 60 45 L 70 30 L 80 90
+        L 90 52.5 L 100 37.5 L 100 0"/>
     </svg>
     <!-- AREA CHART #2: Y Values
         scale each point by 7.5 -->
 
-    <svg transform="scale(1 -1)" viewBox="0 0 400 120" class="chart">
-        <polyline
+    <svg width="200" height="200" id="areacharts2" class="chart">
+        <path transform="scale(1 -1) translate(40, -200)" 
         fill="#0074d9"
         stroke="#0074d9"
         stroke-width="3"
-        points="
-            0, 0
-            0, 60.3
-            15, 52.125
-            30, 56.85
-            45, 66.075
-            60, 62.475
-            75, 74.7
-            90, 54.3
-            105, 31.95
-            120, 81.3
-            135, 36.15
-            150, 42.6
-            150, 0"/>
+        d="M 0 0 L 0 60.3 L 10 52.125 L 20 56.85
+        L 30 66.075 L 40 62.475 L 50 74.7 L 60 54.3
+        L 70 31.95 L 80 81.3 L 90 36.15 L 100 42.6
+        L 100 0"/>
     </svg>
-
+</div>
 <br>
-    <h2>Scatterplot</h2>
-    <svg translate="scale(1 -1)" class="scatter" viewBox="0 0 300 150">
+    <div><h2>Scatterplot</h2>
+    <svg id="scatter" class="scatter" width="200" height="200">
         <circle cx='100' cy="80.4" r="3" style="fill:green"></circle>
         <circle cx='80' cy="69.5" r="3" style="fill:green"></circle>
         <circle cx='130' cy="75.8" r="3" style="fill:green"></circle>
@@ -225,7 +198,7 @@ ID: 463793
         <circle cx='70' cy="48.2" r="3" style="fill:green"></circle>
         <circle cx='50' cy="56.8" r="3" style="fill:green"></circle>
         <rect width="170" height="150" style="fill:transparent;stroke: navy;stroke-width: 2px;"></rect>
-    </svg>
+    </svg></div>
 </body>
 <script src="d3/d3.min.js"></script>
 <script src="d3/d3.js"></script>

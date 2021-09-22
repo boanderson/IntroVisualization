@@ -8,30 +8,24 @@ function staircase() {
     var previous_max = 500; //arbitrary large value
     // ****** TODO: PART II ******
     console.log("STAIRCASE PRESSED");
-    const bchart = document.getElementById("barcharts");
+    const bchart = document.getElementById("barcharts1");
     const numChildren = bchart.childElementCount;
     //console.log(numChildren);
     for(i = 0; i < numChildren; ++i) {
-        if(bchart.children[i].id == "first") {
-            max_width = 0;
-            for(j = 0; j < numChildren; ++j) {
-
-                //checks if on "first bar chart"
-                if(bchart.children[j].id == "first") {
-                    //console.log(bchart.children[j].children[0].width.baseVal.value);
-                    var rect = bchart.children[j];
-                //BEGIN CITATION #1
-                    var width = rect.width.baseVal.value ;
-                //END CITATION #1
-                    if(width >= max_width && width < previous_max) {
-                        max_width = width ;
-                    }
-                }
+        max_width = 0;
+        for(j = 0; j < numChildren; ++j) {
+            //console.log(bchart.children[j].children[0].width.baseVal.value);
+            var rect = bchart.children[j];
+        //BEGIN CITATION #1
+            var width = rect.width.baseVal.value ;
+        //END CITATION #1
+            if(width >= max_width && width < previous_max) {
+                max_width = width ;
             }
-
-            updatedOrder[i] = max_width ;
-            previous_max = max_width ;
         }
+
+        updatedOrder[i] = max_width ;
+        previous_max = max_width ;
     }
 
     //console.log(updatedOrder[0]);
@@ -45,13 +39,112 @@ function staircase() {
             j++;
         }
     }
-    
-    
-
 }
 
-function update(data) {
+function clearGraphs() {
+    console.log("IN CLEAR GRAPHS1");
+    var mybar1 = d3.select('#barcharts1')
+        .selectAll("rect")
+        .remove()
+        .exit();
+    console.log("IN CLEAR GRAPHS2");
+    var mybar2 = d3.select('#barcharts2')
+        .selectAll("rect")
+        .remove()
+        .exit();
+    console.log("IN CLEAR GRAPHS3");
+    var myline1 = d3.select('#linecharts1')
+        .select("path")
+        .remove()
+        .exit();
+    console.log("IN CLEAR GRAPHS4");
+        var myline2 = d3.select('#linecharts2')
+        .select("path")
+        .remove()
+        .exit();
+    console.log("IN CLEAR GRAPHS5");
+    var myarea1 = d3.select('#areacharts1')
+        .select("path")
+        .remove()
+        .exit();
+    console.log("IN CLEAR GRAPHS6");
+    var myarea2 = d3.select('#areacharts2')
+        .select("path")
+        .remove()
+        .exit();
+    console.log("IN CLEAR GRAPHS7");
+    var scat = d3.select('#scatter')
+        .selectAll("circle")
+        .remove()
+        .selectAll("rect")
+        .remove()
+        .exit();
+}
 
+function randomSubset() {
+    // Load the file indicated by the select menu,
+    // and then slice out a random chunk before
+    // passing the data to update()
+    var dataFile = document.getElementById('dataset').value;
+    if (document.getElementById('random').checked) {
+        d3.csv('data/' + dataFile + '.csv').then(function(data) {
+            var subset = [];
+            data.forEach(function(d) {
+                if (Math.random() > 0.5) {
+                    subset.push(d);
+                }
+            });
+            update(subset);
+        });
+    }
+    else{
+        changeData();
+    }
+    console.log("RANDOM SUBSET");
+}
+
+function changeData() {
+    // // Load the file indicated by the select menu
+
+    var dataFile = document.getElementById('dataset').value;
+    console.log("CHANGE DATA");
+    if (document.getElementById('random').checked) {
+        randomSubset();
+    }
+    else{
+        d3.csv('data/' + dataFile + '.csv').then(update);
+    }
+}
+
+
+// function addBarEvents(data) {
+//     var a ;
+//     console.log("BEGIN ADD BAR EVENTS");
+//     var bchart = document.getElementById("barcharts1");
+//     const numChildren = bchart.childElementCount;
+//     for(i = 0; i < numChildren; ++i) {
+//         var rect = bchart.children[i];
+//         rect.setAttribute("style", "fill:red");
+//         //BEGIN CITATION #1
+//         rect.setAttribute("onmouseover", function(d) {
+//             rect.setAttribute("style", "fill:red");
+//         });
+//         //END CITATION #1
+//     }
+// }
+
+function update(data) {
+    var i ;
+    var bchart = document.getElementById("barcharts1");
+    // for(i = 0; i < children; i++) {
+    //     children[i].addEventListener("mousemove", function(event) {
+    //         barColorChange(event);
+    //     });
+    // }
+    var dataFile = document.getElementById('dataset').value;
+    console.log(data);
+
+    // .then(data => {
     // D3 loads all CSV data as strings;
     // while Javascript is pretty smart
     // about interpreting strings as
@@ -89,13 +182,50 @@ function update(data) {
         .range([0, 110]);
 
     // ****** TODO: PART III (you will also edit in PART V) ******
-    var dataFile = document.getElementById('dataset').value;
-    clearGraph("bar");
-    updateData(dataFile);
+        clearGraphs();
 
-    // TODO: Select and update the 'a' bar chart bars
+        // TODO: Select and update the 'a' bar chart bars
+        var translateY1 = 220; //starting y value for transformation
+        var translateY2 = 220;
+        var bchart1, bchart2;
+        bchart1 = d3.select('#barcharts1');
+        bchart2 = d3.select('#barcharts2');
+
+        bchart1.selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("id", "first")
+        .attr("width", function(d) {
+            //console.log(d.a +  "," + d.b);
+            return d.a * 25.0;
+        })
+        .attr("height", 19)
+        .attr("transform", function(d) {
+                translateY1 -= 20;
+                return "translate(0," + translateY1 + ")";
+        });
+
 
     // TODO: Select and update the 'b' bar chart bars
+        bchart2.selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("id", "second")
+        .attr("width", function(d) {
+            //console.log(d.a +  "," + d.b);
+            return d.b * 25.0;
+        })
+        .attr("height", 19)
+        .attr("transform", function(d) {
+                translateY2 -= 20;
+                return "translate(300," + translateY2 + ")";
+        });        
+
+            
+    var lchart1 = d3.select('#linecharts1');
+    var lchart2 = d3.select('#linecharts2');
 
     // TODO: Select and update the 'a' line chart path using this line generator
     var aLineGenerator = d3.line()
@@ -106,9 +236,36 @@ function update(data) {
             return aScale(d.a);
         });
 
+    lchart1.append("path")
+    .attr("fill", "none")
+    .attr("stroke", "#0074d9")
+    .attr("stroke-width", 3)
+    .attr("transform", "scale(1 -1) translate(40 -200)")
+    .attr("d", aLineGenerator(data));
+
     // TODO: Select and update the 'b' line chart path (create your own generator)
 
+    var bLineGenerator = d3.line()
+        .x(function (d, i) {
+            return iScale(i);
+        })
+        .y(function (d) {
+            return bScale(d.b);
+        });
+    
+    lchart2.append("path")
+    .attr("fill", "none")
+    .attr("stroke", "#0074d9")
+    .attr("stroke-width", 3)
+    .attr("transform", "scale(1 -1) translate(40 -200)")
+    .attr("d", bLineGenerator(data));
+
+
+                
+    var achart1 = d3.select('#areacharts1');
+    var achart2 = d3.select('#areacharts2');
     // TODO: Select and update the 'a' area chart path using this line generator
+
     var aAreaGenerator = d3.area()
         .x(function (d, i) {
             return iScale(i);
@@ -118,94 +275,47 @@ function update(data) {
             return aScale(d.a);
         });
 
+    achart1.append("path")
+        .attr("fill", "#0074d9")
+        .attr("stroke", "#0074d9")
+        .attr("stroke-width", 3)
+        .attr("transform", "scale(1 -1) translate(40 -200)")
+        .attr("d", aAreaGenerator(data));
+
     // TODO: Select and update the 'b' area chart path (create your own generator)
 
+    var bAreaGenerator = d3.area()
+    .x(function (d, i) {
+        return iScale(i);
+    })
+    .y0(0)
+    .y1(function (d) {
+        return aScale(d.b);
+    });
+
+    achart2.append("path")
+        .attr("fill", "#0074d9")
+        .attr("stroke", "#0074d9")
+        .attr("stroke-width", 3)
+        .attr("transform", "scale(1 -1) translate(40 -200)")
+        .attr("d", bAreaGenerator(data));
+
+
+    var scatter = d3.select('#scatter');
     // TODO: Select and update the scatterplot points
+    scatter.selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("cx", function(d) {
+        return d.a * 7;
+    })
+    .attr("cy", function(d) {
+        return d.b * 7;
+    })
+    .attr("r", 3)
+    .attr("style", "fill:green");
 
     // ****** TODO: PART IV ******
-}
-
-function clearGraph(type) {
-    if(type == "bar") {
-        let mybar = d3.select('#barcharts')
-            .selectAll("rect")
-            .remove()
-            .exit();
-    }
-}
-
-function changeData() {
-    // // Load the file indicated by the select menu
-    var dataFile = document.getElementById('dataset').value;
-    if (document.getElementById('random').checked) {
-        randomSubset();
-    }
-    else{
-        d3.csv('data/' + dataFile + '.csv').then(update);
-    }
-    console.log("CHANGE DATA");
-}
-
-function updateData(d) {
-    console.log(d);
-    var i = 0;
-    var translateY1 = 220; //starting y value for transformation
-    var translateY2 = 220;
-    var translateX = 0; //starting x value for transformation
-    d3.csv('data/' + d + '.csv')
-    .then(data => {
-        var bchart;
-        console.log(data);
-        var i = 0; //counter
-        const children = 22;
-        console.log("CHILDREN: " + children);
-        bchart = d3.select('#barcharts');
-        console.log(bchart.attr("width"));
-        bchart.selectAll("rect")
-        .data(data)
-        .enter()
-        .append("rect")
-        .attr("width", function(d) {
-            console.log(d.b);
-            return d.a * 25.0;
-        })
-        .attr("height", 19)
-        .attr("transform", function(d) {
-                translateY1 -= 20;
-                return "translate(0," + translateY1 + ")";
-        })
-        .append("rect")
-        .attr("width", function(d) {
-            console.log(d.a);
-            return d.b * 25.0;
-        })
-        .attr("height", 19)
-        .attr("transform", function(d) {
-                translateY2 -= 20;
-                return "translate(400," + translateY2 + ")";
-        });
-    })
+    // addBarEvents(data);
 };
-
-
-function randomSubset() {
-    // Load the file indicated by the select menu,
-    // and then slice out a random chunk before
-    // passing the data to update()
-    var dataFile = document.getElementById('dataset').value;
-    if (document.getElementById('random').checked) {
-        d3.csv('data/' + dataFile + '.csv').then(function(data) {
-            var subset = [];
-            data.forEach(function (d) {
-                if (Math.random() > 0.5) {
-                    subset.push(d);
-                }
-            });
-            update(subset);
-        });
-    }
-    else{
-        changeData();
-    }
-    console.log("RANDOM SUBSET");
-}
