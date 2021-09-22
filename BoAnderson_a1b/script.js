@@ -7,14 +7,11 @@ function staircase() {
     var max_width = 0 ; //arbitrary small value 
     var previous_max = 500; //arbitrary large value
     // ****** TODO: PART II ******
-    console.log("STAIRCASE PRESSED");
     const bchart = document.getElementById("barcharts1");
     const numChildren = bchart.childElementCount;
-    //console.log(numChildren);
     for(i = 0; i < numChildren; ++i) {
         max_width = 0;
         for(j = 0; j < numChildren; ++j) {
-            //console.log(bchart.children[j].children[0].width.baseVal.value);
             var rect = bchart.children[j];
         //BEGIN CITATION #1
             var width = rect.width.baseVal.value ;
@@ -27,14 +24,10 @@ function staircase() {
         updatedOrder[i] = max_width ;
         previous_max = max_width ;
     }
-
-    //console.log(updatedOrder[0]);
     
     j = 0; //will be the counter for first bar chart children
     for(i = 0; i < numChildren; ++i) {
         if(bchart.children[i].id == "first") {
-            //console.log(updatedOrder[j]);
-            //console.log(bchart.children[j].children[0].width.baseVal.value);
             bchart.children[j].width.baseVal.value = updatedOrder[j];
             j++;
         }
@@ -42,37 +35,30 @@ function staircase() {
 }
 
 function clearGraphs() {
-    console.log("IN CLEAR GRAPHS1");
     var mybar1 = d3.select('#barcharts1')
         .selectAll("rect")
         .remove()
         .exit();
-    console.log("IN CLEAR GRAPHS2");
     var mybar2 = d3.select('#barcharts2')
         .selectAll("rect")
         .remove()
         .exit();
-    console.log("IN CLEAR GRAPHS3");
     var myline1 = d3.select('#linecharts1')
         .select("path")
         .remove()
         .exit();
-    console.log("IN CLEAR GRAPHS4");
         var myline2 = d3.select('#linecharts2')
         .select("path")
         .remove()
         .exit();
-    console.log("IN CLEAR GRAPHS5");
     var myarea1 = d3.select('#areacharts1')
         .select("path")
         .remove()
         .exit();
-    console.log("IN CLEAR GRAPHS6");
     var myarea2 = d3.select('#areacharts2')
         .select("path")
         .remove()
         .exit();
-    console.log("IN CLEAR GRAPHS7");
     var scat = d3.select('#scatter')
         .selectAll("circle")
         .remove()
@@ -100,14 +86,12 @@ function randomSubset() {
     else{
         changeData();
     }
-    console.log("RANDOM SUBSET");
 }
 
 function changeData() {
     // // Load the file indicated by the select menu
 
     var dataFile = document.getElementById('dataset').value;
-    console.log("CHANGE DATA");
     if (document.getElementById('random').checked) {
         randomSubset();
     }
@@ -134,17 +118,6 @@ function changeData() {
 // }
 
 function update(data) {
-    var i ;
-    var bchart = document.getElementById("barcharts1");
-    // for(i = 0; i < children; i++) {
-    //     children[i].addEventListener("mousemove", function(event) {
-    //         barColorChange(event);
-    //     });
-    // }
-    var dataFile = document.getElementById('dataset').value;
-    console.log(data);
-
-    // .then(data => {
     // D3 loads all CSV data as strings;
     // while Javascript is pretty smart
     // about interpreting strings as
@@ -197,7 +170,6 @@ function update(data) {
         .append("rect")
         .attr("id", "first")
         .attr("width", function(d) {
-            //console.log(d.a +  "," + d.b);
             return d.a * 25.0;
         })
         .attr("height", 19)
@@ -214,7 +186,6 @@ function update(data) {
         .append("rect")
         .attr("id", "second")
         .attr("width", function(d) {
-            //console.log(d.a +  "," + d.b);
             return d.b * 25.0;
         })
         .attr("height", 19)
