@@ -96,7 +96,9 @@ function changeData() {
         randomSubset();
     }
     else{
-        d3.csv('data/' + dataFile + '.csv').then(update);
+        d3.csv('data/' + dataFile + '.csv').then(function(data) {
+            update(data);
+        });
     }
 }
 
