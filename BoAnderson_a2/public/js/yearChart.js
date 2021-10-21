@@ -54,18 +54,18 @@ YearChart.prototype.chooseClass = function (party) {
     else if (party == "I") {
         return "yearChart independent";
     }
-}
+};
 
 
 /**
  * Creates a chart with circles representing each election year, populates text content and other required elements for the Year Chart
  */
-YearChart.prototype.update = function(){
+YearChart.prototype.update = function() {
     var self = this;
     var clicked = null;
 
     //Domain definition for global color scale
-    var domain = [-60,-50,-40,-30,-20,-10,0,10,20,30,40,50,60 ];
+    var domain = [-60,-50,-40,-30,-20,-10,0,10,20,30,40,50,60];
 
     //Color range for global color scale
     var range = ["#0066CC", "#0080FF", "#3399FF", "#66B2FF", "#99ccff", "#CCE5FF", "#ffcccc", "#ff9999", "#ff6666", "#ff3333", "#FF0000", "#CC0000"];
@@ -84,7 +84,82 @@ YearChart.prototype.update = function(){
     //The circles should be colored based on the winning party for that year
     //HINT: Use the .yearChart class to style your circle elements
     //HINT: Use the chooseClass method to choose the color corresponding to the winning party.
-    
+
+    var svg = d3.select("#year-chart").select("svg");
+
+    //<div id="year-chart" class="view">
+    self.electionWinners.forEach(function(d){
+		d.YEAR = +d.YEAR;
+  });
+  
+
+  var i = 0;
+  
+  //PUTTING DASHES IN FOR AESTHETIC OF YEAR CHART
+  for(i = 0; i < 43; i++) {
+    svg.append("text")
+    .attr("font-size", 10)
+    .text(" - ")
+    .attr("fill", "#00000a")
+    .attr("x", function(d) {
+      return (i * 20) + 24;
+    })
+    .attr("y", 53);
+  }
+
+    //console.log(value == "revenue");
+		// Store csv data in global variable
+
+    var circles = svg.selectAll("circle")
+          .data(self.electionWinners);
+
+      circles.enter().append("circle")
+          .attr("fill", function(d) {
+              if(d.PARTY == "D") {
+                return "#0066CC";
+              }
+              else if(d.PARTY == "R") {
+                return "#CC0000";
+              }
+              else {
+                return "#43A047";
+              }
+          })
+          .attr("cy", 50)
+          .attr("cx", function(d, index) { 
+              return (index * 25 ) + 30 ;
+        })
+          .attr("r", 5)
+          .on("click", function(a, data) {
+            d3.csv("data/election-results-" + data.YEAR + ".csv")
+            .then(function(electionWinners) {
+                //pass the instances of all the charts that update on selection change in YearChart
+                self.electoralVoteChart.update(electionWinners, range);
+                self.votePercentageChart.update(electionWinners);
+          })});
+
+      // Exit
+      circles.exit().remove();
+
+      var text = svg.selectAll("text")
+        .data(self.electionWinners);
+
+      // Enter (initialize the newly added elements)
+      text.enter().append("text")
+          .attr("class", "text")
+          .attr("fill", "#00000a")
+          .attr("y", 65)
+          .attr("font-size", 16)
+          .attr("x", function(d, index) {
+            return (index * 25) + 24;
+           })
+           .attr("font-size", 5)
+          .text( function(d) {
+            	return d.YEAR;
+          });
+
+      // Exit
+      text.exit().remove();
 
     //Append text information of each year right below the corresponding circle
     //HINT: Use .yeartext class to style your text elements
